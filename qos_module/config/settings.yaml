@@ -1,0 +1,7 @@
+model_params:
+  arima_order: [2, 1, 2]
+  lstm_units: 64
+
+network:
+  sampling_interval: 60  # seconds
+  max_latency: 1000  # ms
