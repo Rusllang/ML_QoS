@@ -58,5 +58,6 @@ normal_pcap = generate_normal_traffic()
 syn_pcap = generate_syn_flood()
 udp_pcap = generate_udp_flood()
 icmp_pcap = generate_icmp_flood()
+ddos_pcap = generate_ddos_attack()
 
-normal_pcap, syn_pcap, udp_pcap, icmp_pcap
+normal_pcap, syn_pcap, udp_pcap, icmp_pcap, ddos_pcap

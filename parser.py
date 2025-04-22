@@ -39,3 +39,13 @@ def parse_pcap(file_path: str, label: str) -> pd.DataFrame:
 
     capture.close()
     return pd.DataFrame(data)
+
+
+path = "normal_traffic.pcap"
+tr_lab = "normal"
+
+df = parse_pcap(path, label=tr_lab)
+
+df.to_csv("normal.csv", index=False)
+
+print(df.head())

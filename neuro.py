@@ -96,3 +96,27 @@ class TrafficModelWrapper:
             return f"iptables -A INPUT -s {ip}/24 -j DROP  # DDoS Mitigation"
         else:
             return f"# Unknown class for {ip}"
+        
+        
+        
+        
+        
+        
+df = pd.read_csv("ddos.csv")
+lmap = {'normal' : 0, 'ddos' : 4}
+df['label'] = df["label"].map(lmap)
+
+model = TrafficModelWrapper()
+
+X = model.preprocess(df, fit=True)
+y = torch.tensor(df["label"].values, dtype = torch.long)
+
+model.fit_model(X,y, epochs=20)
+
+
+df_test = pd.read_csv("normal.csv")
+
+rules = model.predict_and_generate_rules(df_test)
+
+for rule in rules[:10]:
+    print(rule)
