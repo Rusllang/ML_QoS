@@ -1,7 +1,7 @@
 from scapy.all import IP, TCP, UDP, ICMP, Ether, wrpcap, RandShort
 import random
 
-def generate_normal_traffic(filename="normal_traffic.pcap", packet_count=100):
+def generate_normal_traffic(filename="normal_traffic.pcap", packet_count=1000):
     packets = []
     for _ in range(packet_count):
         src_port = random.randint(1024, 65535)

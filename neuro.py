@@ -2,6 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import numpy as np
 
@@ -102,8 +106,8 @@ class TrafficModelWrapper:
         
         
         
-df = pd.read_csv("ddos.csv")
-lmap = {'normal' : 0, 'ddos' : 4}
+df = pd.read_csv("dir_dataset.csv")
+lmap = {'normal' : 0, 'syn_flood' : 1, 'udp_flood' : 2, 'icmp_flood' : 3, 'ddos' : 4}
 df['label'] = df["label"].map(lmap)
 
 model = TrafficModelWrapper()
@@ -111,12 +115,29 @@ model = TrafficModelWrapper()
 X = model.preprocess(df, fit=True)
 y = torch.tensor(df["label"].values, dtype = torch.long)
 
-model.fit_model(X,y, epochs=20)
+model.fit_model(X,y, epochs=50)
 
 
 df_test = pd.read_csv("normal.csv")
+df_test['label'] = df_test["label"].map(lmap)
+
+
+# Предобработка и инференс
+X_test = model.preprocess(df_test)
+y_pred = model.predict(X_test).numpy()
+y_true = df_test["label"].values
+
+# === Матрица ошибок ===
+cm = confusion_matrix(y_true, y_pred, labels=[0, 4])
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["normal", "ddos"], yticklabels=["normal", "ddos"])
+plt.title("Матрица ошибок")
+plt.xlabel("Предсказано")
+plt.ylabel("Истинно")
+plt.show()
 
 rules = model.predict_and_generate_rules(df_test)
+
+
 
 for rule in rules[:10]:
     print(rule)
