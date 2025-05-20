@@ -106,7 +106,7 @@ class TrafficModelWrapper:
         
         
         
-df = pd.read_csv("dir_dataset.csv")
+df = pd.read_csv("parsed/edu_dataset.csv")
 lmap = {'normal' : 0, 'syn_flood' : 1, 'udp_flood' : 2, 'icmp_flood' : 3, 'ddos' : 4}
 df['label'] = df["label"].map(lmap)
 
@@ -118,7 +118,7 @@ y = torch.tensor(df["label"].values, dtype = torch.long)
 model.fit_model(X,y, epochs=50)
 
 
-df_test = pd.read_csv("normal.csv")
+df_test = pd.read_csv("parsed/normal.csv")
 df_test['label'] = df_test["label"].map(lmap)
 
 
